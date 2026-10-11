@@ -1,5 +1,7 @@
 # My Playwright Framework
 
+![CI](https://github.com/1841093233/my-playwright-framework/actions/workflows/playwright.yml/badge.svg)
+
 基于 Playwright + Pytest 的 UI 自动化测试框架，覆盖 SauceDemo 电商网站的核心业务流程。
 
 ## 技术栈
