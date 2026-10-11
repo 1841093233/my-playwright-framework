@@ -11,6 +11,7 @@
 | Python | 开发语言 |
 | Playwright | 浏览器自动化 |
 | Pytest | 测试框架 |
+| Allure | 测试报告 |
 | GitHub Actions | CI 持续集成 |
 
 ## 项目结构
@@ -26,7 +27,8 @@
 │   └── inventory_page.py        # 商品列表页
 ├── tests/                       # 测试用例
 │   ├── test_login.py            # 登录测试
-│   └── test_cart.py             # 购物车测试
+│   ├── test_cart.py             # 购物车测试
+│   └── test_api.py              # API 测试
 ├── data/                        # 测试数据
 │   └── users.json
 ├── config.py                    # 全局配置
@@ -62,7 +64,12 @@ def test_valid_login(self, login_page, test_users):
 
 **好处**：按需注入，自动准备和清理。
 
-### 3. 失败自动诊断
+### 3. UI + API 混合测试
+
+- **UI 测试**：用 Playwright 驱动浏览器，覆盖登录、购物车、登出等流程
+- **API 测试**：用 Playwright 的 `request` 模块，验证接口状态码和返回结构
+
+### 4. 失败自动诊断
 
 配置了 `pytest.ini`：
 
@@ -79,7 +86,16 @@ playwright show-trace test-results/xxx/trace.zip
 
 能像视频一样回放整个测试过程，看每一步的 DOM 快照、网络请求、控制台日志。
 
-### 4. CI 集成
+### 5. Allure 报告
+
+```bash
+pytest --alluredir=allure-results
+allure serve allure-results
+```
+
+生成 HTML 报告，包含用例步骤、耗时统计。
+
+### 6. CI 集成
 
 GitHub Actions 自动执行测试，每次 push 或 PR 触发。
 
@@ -88,6 +104,7 @@ GitHub Actions 自动执行测试，每次 push 或 PR 触发。
 ### 环境要求
 
 - Python 3.10+
+- Java 11+（仅 Allure 报告需要）
 
 ### 安装
 
@@ -129,6 +146,9 @@ pytest tests/test_login.py::TestLogin::test_valid_login
 
 # 带浏览器界面跑（调试用）
 pytest --headed
+
+# 只跑 API 测试
+pytest tests/test_api.py -v
 ```
 
 ## 测试覆盖
@@ -137,7 +157,8 @@ pytest --headed
 |---|---|---|
 | 登录 | 4 | 正常登录、密码错误、锁定用户、登出 |
 | 购物车 | 3 | 空购物车、加购一件、加购两件 |
-| **合计** | **7** | |
+| API | 3 | GET、POST、状态码 |
+| **合计** | **10** | |
 
 ## 作者
 

@@ -11,6 +11,7 @@ test-results/
 playwright-report/
 blob-report/
 allure-results/
+allure-report/
 .coverage
 htmlcov/
 
