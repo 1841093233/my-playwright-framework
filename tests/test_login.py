@@ -1,4 +1,5 @@
 """登录功能测试。"""
+import pytest
 from playwright.sync_api import expect
 from config import INVENTORY_URL, BASE_URL
 
@@ -31,3 +32,14 @@ class TestLogin:
 
         inventory_page.logout()
         expect(login_page.page).to_have_url(BASE_URL)
+
+    @pytest.mark.parametrize("username,password,expected_error", [
+        ("standard_user", "wrong_password", "Username and password do not match"),
+        ("", "secret_sauce", "Username is required"),
+        ("standard_user", "", "Password is required"),
+        ("locked_out_user", "secret_sauce", "locked out"),
+    ])
+    def test_login_errors(self, login_page, username, password, expected_error):
+        """参数化：验证各种登录错误场景。"""
+        login_page.login(username, password)
+        assert expected_error.lower() in login_page.get_error_message().lower()
