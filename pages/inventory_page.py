@@ -29,9 +29,9 @@ class InventoryPage(BasePage):
         return 0
 
     def open_cart(self):
-        self.safe_click(self.cart_link)
+        self.click(self.cart_link)
 
     def logout(self):
         """退出登录。"""
-        self.safe_click(self.burger_menu)
-        self.safe_click(self.logout_link)
+        self.click(self.burger_menu)
+        self.click(self.logout_link)

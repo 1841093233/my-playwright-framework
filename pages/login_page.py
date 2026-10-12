@@ -20,7 +20,7 @@ class LoginPage(BasePage):
         self.goto()
         self.username_input.fill(username)
         self.password_input.fill(password)
-        self.safe_click(self.login_button)
+        self.click(self.login_button)
 
     def get_error_message(self) -> str:
         """获取错误提示文本。"""

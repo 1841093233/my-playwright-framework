@@ -6,9 +6,8 @@ class BasePage:
     def __init__(self, page: Page):
         self.page = page
 
-    def safe_click(self, locator):
-        """等待元素可见后点击。"""
-        locator.wait_for(state="visible")
+    def click(self, locator):
+        """点击。"""
         locator.click()
 
     def wait_for_url(self, url: str):
