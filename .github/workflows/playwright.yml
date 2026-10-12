@@ -31,7 +31,20 @@ jobs:
         run: playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run tests
-        run: pytest --browser=${{ matrix.browser }}
+        run: pytest --browser=${{ matrix.browser }} --alluredir=allure-results
+
+      - name: Install Allure
+        if: always()
+        run: |
+          curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/download/2.46.1/allure-2.46.1.tgz
+          tar -xzf allure.tgz
+          sudo mv allure-2.46.1 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+          allure --version
+
+      - name: Generate Allure report
+        if: always()
+        run: allure generate allure-results -o allure-report --clean
 
       - name: Upload test results
         if: always()
@@ -41,4 +54,12 @@ jobs:
           path: |
             test-results/
             allure-results/
+          retention-days: 7
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-${{ matrix.browser }}
+          path: allure-report/
           retention-days: 7
